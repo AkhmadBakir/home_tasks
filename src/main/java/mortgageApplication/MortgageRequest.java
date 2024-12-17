@@ -19,19 +19,19 @@ public class MortgageRequest {
         boolean result = true;
 
         AgeValidationRule ageValidationRule = new AgeValidationRule(age);
-        if (ageValidationRule.isValid()) {
+        if (!ageValidationRule.isValid()) {
             result = false;
             System.out.println(ageValidationRule.getErrorMessage());
         }
 
         MortgageAmountValidationRule amountValidationRule = new MortgageAmountValidationRule(amount);
-        if (amountValidationRule.isValid()) {
+        if (!amountValidationRule.isValid()) {
             result = false;
             System.out.println(amountValidationRule.getErrorMessage());
         }
 
         EmploymentValidationRule employmentValidationRule = new EmploymentValidationRule(employed);
-        if (employmentValidationRule.isValid()) {
+        if (!employmentValidationRule.isValid()) {
             result = false;
             System.out.println(employmentValidationRule.getErrorMessage());
         }

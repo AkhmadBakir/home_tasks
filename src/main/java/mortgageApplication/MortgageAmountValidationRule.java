@@ -9,6 +9,6 @@ public class MortgageAmountValidationRule extends ValidationRule<Integer> {
     // Объявите и реализуйте метод для проверки суммы ипотеки ниже
     @Override
     public boolean isValid() {
-        return (value >= 1_000_000) && (value <= 10_000_000);
+        return value >= 1000000 && value <= 10000000;
     }
 }
