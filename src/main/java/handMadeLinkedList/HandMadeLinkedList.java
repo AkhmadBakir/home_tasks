@@ -1,4 +1,4 @@
-package HandMadeLinkedList;
+package handMadeLinkedList;
 
 public class HandMadeLinkedList<T> {
 

@@ -1,4 +1,4 @@
-package HandMadeArrayList;
+package handMadeArrayList;
 
 public class HandMadeArrayList<T> {
 
