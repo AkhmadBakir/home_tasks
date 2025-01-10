@@ -1,3 +1,5 @@
+package OrderManager;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -5,6 +7,7 @@ public class OrderManager {
 
     // Класс заказа
     static class Order {
+
         private final String customerName;
         private final String productName;
         private final int quantity;
