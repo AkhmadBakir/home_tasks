@@ -1,6 +1,7 @@
+package BookEditor;
+
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 
 public class BookEditor {
@@ -65,14 +66,14 @@ interface LineProcessor {
 
 
 
-//class ToUpperCaseHeaderDecorator implements HeaderDecorator {
+//class ToUpperCaseHeaderDecorator implements BookEditor.HeaderDecorator {
 //    @Override
 //    public String decorate(String header) {
 //        return header.toUpperCase() + "\n";
 //    }
 //}
 //
-//class CapitalizeFirstLetterProcessor implements LineProcessor {
+//class CapitalizeFirstLetterProcessor implements BookEditor.LineProcessor {
 //    @Override
 //    public String processLine(String line) {
 //        return line.substring(0, 1).toUpperCase() + line.substring(1);
