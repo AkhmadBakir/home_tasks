@@ -1,9 +1,7 @@
 package StreamAPI.UniversityExample;
 
 import java.util.*;
-import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class UniversityExample {
 
@@ -41,20 +39,6 @@ public class UniversityExample {
                 .peek(student -> graduatesClub.add(student.email))
                 .collect(Collectors.toList());
 
-        students.get(0).courses.add(java);
-        students.get(0).courses.add(javascript);
-        students.get(1).courses.add(java);
-        students.get(1).courses.add(python);
-        students.get(2).courses.add(java);
-
-        List<Student> studentsCourses = students.stream()
-                .filter(student -> student.courses.contains(javascript))
-                .collect(Collectors.toList());
-
-        for (Student student : studentsCourses) {
-            System.out.println(student);
-        }
-
         for (Student student : graduatedStudents) {
             System.out.println(student);
         }
@@ -63,6 +47,23 @@ public class UniversityExample {
             System.out.println(email);
         }
 
+        students.get(0).courses.add(java);
+        students.get(0).courses.add(javascript);
+        students.get(1).courses.add(java);
+        students.get(1).courses.add(python);
+        students.get(2).courses.add(java);
+
+
+        //получить список студентов посещающих конкретный курс
+        List<Student> studentsCourses = students.stream()
+                .filter(student -> student.courses.contains(javascript))
+                .collect(Collectors.toList());
+
+        for (Student student : studentsCourses) {
+            System.out.println(student);
+        }
+
+        //получить курс который посещают все студенты
         List<Course> allStudentsInCourses = students.stream()
                 .map(student -> new HashSet<>(student.courses))
                 .reduce((set1, set2) -> {
@@ -76,6 +77,7 @@ public class UniversityExample {
 
         System.out.println(allStudentsInCourses);
 
+        //получить список студентов, которые посещают больше половины доступных курсов
         List<Student> studentsInHalfCourses = students.stream()
                 .filter(student -> student.courses.size() > allCourses.size() / 2)
                 .collect(Collectors.toList());
