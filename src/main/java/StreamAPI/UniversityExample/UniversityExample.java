@@ -19,6 +19,8 @@ public class UniversityExample {
         Course javascript = new Course("javascript");
         allCourses.add(javascript);
 
+        //allCourses.add(new Course("C++"));
+
         //соответствие года поступления и названия группы
         Map<Integer, String> groupNames = new HashMap<>();
         groupNames.put(2020, "2020-ГР1");
@@ -55,36 +57,83 @@ public class UniversityExample {
 
 
         //получить список студентов посещающих конкретный курс
-        List<Student> studentsCourses = students.stream()
+        students.stream()
                 .filter(student -> student.courses.contains(javascript))
-                .collect(Collectors.toList());
+                .forEach(System.out::println);
 
-        for (Student student : studentsCourses) {
-            System.out.println(student);
-        }
+        //
+//        for (Student student : studentsCourses) {
+//            System.out.println(student);
+//        }
 
         //получить курс который посещают все студенты
-        List<Course> allStudentsInCourses = students.stream()
-                .map(student -> new HashSet<>(student.courses))
-                .reduce((set1, set2) -> {
-                    set1.retainAll(set2);
-                    return set1;
-                })
-                .stream()
-                //.flatMap(set -> set.stream())
-                .flatMap(Collection::stream)
-                .collect(Collectors.toList());
+//        List<Course> allStudentsInCourses = students.stream()
+//                .map(student -> new HashSet<>(student.courses))
+//                .reduce((set1, set2) -> {
+//                    set1.retainAll(set2);
+//                    return set1;
+//                })
+//                .stream()
+//                //.flatMap(set -> set.stream())
+//                .flatMap(Collection::stream)
+//                .collect(Collectors.toList());
 
-        System.out.println(allStudentsInCourses);
+        students.stream()
+                .flatMap(student -> student.courses.stream())
+                .collect(Collectors.groupingBy(course -> course, Collectors.counting()))
+                .entrySet().stream()
+                .filter(entry -> entry.getValue() == students.size())
+                .map(Map.Entry::getKey)
+                .findFirst();
+
+
+
+
+
+        //System.out.println(allStudentsInCourses);
 
         //получить список студентов, которые посещают больше половины доступных курсов
-        List<Student> studentsInHalfCourses = students.stream()
+        //moreHalfCourses(students, allCourses);
+    }
+
+    public static List<String> moreHalfCourses(List<Student> students, List<Course> allCourses) {
+        return students.stream()
                 .filter(student -> student.courses.size() > allCourses.size() / 2)
+                .map(student -> student.name)
                 .collect(Collectors.toList());
 
-        System.out.println(studentsInHalfCourses);
     }
+
+    public static Optional<Course> getTopCourse(List<Student> students) {
+        return students.stream()
+                .flatMap(student -> student.courses.stream())
+                .collect(Collectors.groupingBy(course -> course, Collectors.counting()))
+                .entrySet()
+                .stream()
+                .max(Map.Entry.comparingByValue())
+                .map(Map.Entry::getKey);
+    }
+
+    public static List<String> getTopStudents(List<Student> students) {
+        List<String> topStudents = students.stream()
+                .sorted((o1, o2) -> o2.courses.size() - o1.courses.size())
+                .limit(2)
+                .map(student -> student.name)
+                .collect(Collectors.toList());
+        return topStudents;
+    }
+
+    public static List<String> getUniqueCourses(List<String> courses) {
+        List<String> uniqueCourse = courses.stream()
+                .distinct()
+                .collect(Collectors.toList());
+        System.out.println(uniqueCourse);
+        return uniqueCourse;
+    }
+    
 }
+
+
 
 class Course {
     String name;
@@ -100,6 +149,18 @@ class Course {
                 "}";
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Course course = (Course) o;
+        return Objects.equals(name, course.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(name);
+    }
 }
 
 class Student {

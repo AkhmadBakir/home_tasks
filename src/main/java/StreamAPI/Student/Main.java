@@ -1,5 +1,7 @@
 package StreamAPI.Student;
 
+import org.w3c.dom.ls.LSOutput;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -12,11 +14,26 @@ public class Main {
         List<Student> students = new ArrayList<>();
         List<String> courses = new ArrayList<>();
 
-        List<String> uniqueCourse = courses.stream()
-                .distinct()
-                .collect(Collectors.toList());
-        System.out.println(uniqueCourse);
+//        getUniqCourses(courses);
+//
+//        getTopStudents(students);
+//
+//        getTopCourse(students);
+    }
 
+    private static void getTopCourse(List<Student> students) {
+        students.stream()
+                .flatMap(student -> student.getAllCourses().stream())
+                .collect(Collectors.groupingBy(course -> course, Collectors.counting()))
+                .entrySet()
+                .stream()
+                .max(Map.Entry.comparingByValue())
+                .map(entry -> entry.getKey())
+                .ifPresentOrElse(course -> System.out.println(course),
+                        () -> System.out.println("Такого курса нет"));
+    }
+
+    private static void getTopStudents(List<Student> students) {
         List<String> topStudents = students.stream()
                 .sorted((o1, o2) -> o2.getAllCourses().size() - o1.getAllCourses().size())
                 .limit(3)
@@ -24,15 +41,13 @@ public class Main {
                 .map(student -> student.getName())
                 .collect(Collectors.toList());
         System.out.println(topStudents);
+    }
 
-        Course topCourses = students.stream()
-                .flatMap(student -> student.getAllCourses().stream())
-                .collect(Collectors.groupingBy(course -> course, Collectors.counting()))
-                .entrySet()
-                .stream()
-                .max(Map.Entry.comparingByValue())
-                .map(entry -> entry.getKey())
-                .orElse(null);
+    private static void getUniqCourses(List<String> courses) {
+        List<String> uniqueCourse = courses.stream()
+                .distinct()
+                .collect(Collectors.toList());
+        System.out.println(uniqueCourse);
     }
 
     public List<Course> courses(List<Student> students) {
